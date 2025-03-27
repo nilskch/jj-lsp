@@ -16,4 +16,8 @@ I have yet to figure out if this is a good idea/nice development workflow or not
 LSP for myself for now to figure this out, but happy to hear your (yes you, the person who reads
 this right now) opinion about this. Please open an issue, write me an email, or ping me on Discord.
 
-If anyone is interested in using this LSP at some point, I'm happy to build an extension for
+## Planned features (for now)
+- [ ] Diagnostics for conflicts
+- [ ] Code actions to resolve conflicts
+- [ ] Code lenses to resolve conflicts (similar to git integration in VSCode)
+- [ ] Hover tooltips to show a nicer markdown representaion of the conflict

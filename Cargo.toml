@@ -2,5 +2,11 @@
 name = "jj-vcs"
 version = "0.1.0"
 edition = "2021"
+description = "LSP to resolve conflicts in the jj-vcs"
+authors = ["Nils Koch <mail@nilskch.dev>"]
+repository = "https://github.com/nilskch/jj-lsp"
+readme = "README.md"
+license = "MIT"
+categories = ["jj", "lsp"]
 
 [dependencies]

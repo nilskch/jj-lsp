@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "jj-vcs"
+name = "jj-lsp"
 version = "0.1.0"

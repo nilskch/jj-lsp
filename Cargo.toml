@@ -7,6 +7,5 @@ authors = ["Nils Koch <mail@nilskch.dev>"]
 repository = "https://github.com/nilskch/jj-lsp"
 readme = "README.md"
 license = "MIT"
-categories = ["jj", "lsp"]
 
 [dependencies]

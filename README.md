@@ -20,4 +20,4 @@ this right now) opinion about this. Please open an issue, write me an email, or 
 - [ ] Diagnostics for conflicts
 - [ ] Code actions to resolve conflicts
 - [ ] Code lenses to resolve conflicts (similar to git integration in VSCode)
-- [ ] Hover tooltips to show a nicer markdown representaion of the conflict
+- [ ] Hover tooltips to show a nicer markdown representation of the conflict

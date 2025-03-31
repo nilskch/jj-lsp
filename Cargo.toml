@@ -1,6 +1,6 @@
 [package]
 name = "jj-lsp"
-version = "0.1.0"
+version = "0.1.1-dev1"
 edition = "2021"
 description = "LSP to resolve conflicts in the jj-vcs"
 authors = ["Nils Koch <mail@nilskch.dev>"]
@@ -9,3 +9,5 @@ readme = "README.md"
 license = "MIT"
 
 [dependencies]
+tower-lsp-server = "0.21.0"
+tokio = { version = "1.44.1", features = ["full"] }

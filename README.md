@@ -1,8 +1,7 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 # jj-lsp
 
-Simple LSP to resolve conflicts in the [jj-vcs](https://github.com/jj-vcs/jj). With jj, conflicts
-can stay inside the code and they do not need to be resolved immediately. They can be resolved
-later when needed. An LSP can be handy for resolving conflicts in the code whenever needed.
+Simple LSP to resolve conflicts in the [jj-vcs](https://github.com/jj-vcs/jj).
 
 ## Motivation & Contributing
 
@@ -21,3 +20,7 @@ this right now) opinion about this. Please open an issue, write me an email, or 
 - [ ] Code actions to resolve conflicts
 - [ ] Code lenses to resolve conflicts (similar to git integration in VSCode)
 - [ ] Hover tooltips to show a nicer markdown representation of the conflict
+
+## License
+
+This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.

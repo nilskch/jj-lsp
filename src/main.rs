@@ -1,4 +1,7 @@
 mod backend;
+mod conflict;
+mod types;
+mod utils;
 
 use backend::Backend;
 use tower_lsp_server::{LspService, Server};

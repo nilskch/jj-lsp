@@ -17,6 +17,7 @@ this right now) opinion about this. Please open an issue, write me an email, or 
 
 ## Planned features (for now)
 - [ ] Diagnostics for conflicts
+- [ ] Folding ranges for the different changes
 - [ ] Code actions to resolve conflicts
 - [ ] Code lenses to resolve conflicts (similar to git integration in VSCode)
 - [ ] Hover tooltips to show a nicer markdown representation of the conflict

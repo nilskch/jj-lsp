@@ -49,6 +49,7 @@ impl<'a> Analyzer<'a> {
     }
 
     fn parse_diff_marker(&mut self) {
+        let title_range = self.get_range_of_current_line().unwrap();
         self.next();
         let mut blocks = vec![];
 
@@ -70,42 +71,48 @@ impl<'a> Analyzer<'a> {
             }
         }
 
-        let conflict = Conflict { _blocks: blocks };
-        self.conflicts.push(conflict);
+        if let Some(cur_line) = self.cur_line {
+            let end_position = Position::new(self.cur_line_number, get_utf16_len(cur_line));
+
+            let conflict = Conflict {
+                range: Range::new(title_range.start, end_position),
+                title_range,
+                blocks,
+            };
+            self.conflicts.push(conflict);
+        }
     }
 
     fn parse_change_block(&mut self) -> Option<ChangeBlock> {
+        let title_range = self.get_range_of_current_line()?;
         self.next();
 
-        let start_line = self.cur_line_number;
         let mut content = String::new();
         let mut next_line = self.cur_line?;
 
         while !is_known_pattern(next_line) {
-            if next_line.starts_with("+") {
+            if let Some(line_content) = next_line.strip_prefix("+") {
                 if !content.is_empty() {
                     content.push('\n');
                 }
-                content.push_str(&next_line[1..]);
+                content.push_str(line_content);
             }
             next_line = self.next()?;
         }
 
         let block = ChangeBlock {
-            _content: content,
-            _range: Range::new(
-                Position::new(start_line, 0),
-                Position::new(self.cur_line_number - 1, get_utf16_len(next_line)),
-            ),
+            title_range,
+            content,
         };
 
         Some(block)
     }
 
     fn parse_contents_block(&mut self) -> Option<ChangeBlock> {
-        self.next();
+        let title_range = self.get_range_of_current_line()?;
 
-        let start_line = self.cur_line_number;
+        self.next()?;
+
         let mut content = String::new();
         let mut next_line = self.cur_line?;
 
@@ -118,11 +125,8 @@ impl<'a> Analyzer<'a> {
         }
 
         let block = ChangeBlock {
-            _content: content,
-            _range: Range::new(
-                Position::new(start_line, 0),
-                Position::new(self.cur_line_number - 1, get_utf16_len(next_line)),
-            ),
+            title_range,
+            content,
         };
 
         Some(block)
@@ -137,6 +141,13 @@ impl<'a> Analyzer<'a> {
         }
 
         self.cur_line
+    }
+
+    fn get_range_of_current_line(&self) -> Option<Range> {
+        Some(Range {
+            start: Position::new(self.cur_line_number, 0),
+            end: Position::new(self.cur_line_number, get_utf16_len(self.cur_line?)),
+        })
     }
 }
 

@@ -1,66 +1,106 @@
 ---
 source: src/conflict.rs
-assertion_line: 162
+assertion_line: 172
 expression: conflicts
 ---
 [
     Conflict {
-        _blocks: [
+        range: Range {
+            start: Position {
+                line: 5,
+                character: 0,
+            },
+            end: Position {
+                line: 20,
+                character: 28,
+            },
+        },
+        title_range: Range {
+            start: Position {
+                line: 5,
+                character: 0,
+            },
+            end: Position {
+                line: 5,
+                character: 23,
+            },
+        },
+        blocks: [
             ChangeBlock {
-                _range: Range {
+                title_range: Range {
                     start: Position {
-                        line: 7,
+                        line: 6,
                         character: 0,
                     },
                     end: Position {
-                        line: 14,
+                        line: 6,
+                        character: 36,
+                    },
+                },
+                content: "1 pez\n2 pez\n3 pez\n4 pez",
+            },
+            ChangeBlock {
+                title_range: Range {
+                    start: Position {
+                        line: 15,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: 15,
                         character: 27,
                     },
                 },
-                _content: "1 pez\n2 pez\n3 pez\n4 pez",
-            },
-            ChangeBlock {
-                _range: Range {
-                    start: Position {
-                        line: 16,
-                        character: 0,
-                    },
-                    end: Position {
-                        line: 19,
-                        character: 28,
-                    },
-                },
-                _content: "1 poisson\n2 poisson\n3 poisson\n4 poisson",
+                content: "1 poisson\n2 poisson\n3 poisson\n4 poisson",
             },
         ],
     },
     Conflict {
-        _blocks: [
+        range: Range {
+            start: Position {
+                line: 22,
+                character: 0,
+            },
+            end: Position {
+                line: 37,
+                character: 28,
+            },
+        },
+        title_range: Range {
+            start: Position {
+                line: 22,
+                character: 0,
+            },
+            end: Position {
+                line: 22,
+                character: 23,
+            },
+        },
+        blocks: [
             ChangeBlock {
-                _range: Range {
+                title_range: Range {
                     start: Position {
-                        line: 24,
+                        line: 23,
                         character: 0,
                     },
                     end: Position {
-                        line: 31,
+                        line: 23,
+                        character: 36,
+                    },
+                },
+                content: "5 pez\n6 pez\n7 pez\n8 pez",
+            },
+            ChangeBlock {
+                title_range: Range {
+                    start: Position {
+                        line: 32,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: 32,
                         character: 27,
                     },
                 },
-                _content: "5 pez\n6 pez\n7 pez\n8 pez",
-            },
-            ChangeBlock {
-                _range: Range {
-                    start: Position {
-                        line: 33,
-                        character: 0,
-                    },
-                    end: Position {
-                        line: 36,
-                        character: 28,
-                    },
-                },
-                _content: "5 poisson\n6 poisson\n7 poisson\n8 poisson",
+                content: "5 poisson\n6 poisson\n7 poisson\n8 poisson",
             },
         ],
     },

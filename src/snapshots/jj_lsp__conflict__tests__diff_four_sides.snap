@@ -1,118 +1,158 @@
 ---
 source: src/conflict.rs
-assertion_line: 180
+assertion_line: 190
 expression: conflicts
 ---
 [
     Conflict {
-        _blocks: [
+        range: Range {
+            start: Position {
+                line: 5,
+                character: 0,
+            },
+            end: Position {
+                line: 38,
+                character: 28,
+            },
+        },
+        title_range: Range {
+            start: Position {
+                line: 5,
+                character: 0,
+            },
+            end: Position {
+                line: 5,
+                character: 23,
+            },
+        },
+        blocks: [
             ChangeBlock {
-                _range: Range {
+                title_range: Range {
                     start: Position {
-                        line: 7,
+                        line: 6,
                         character: 0,
                     },
                     end: Position {
-                        line: 14,
+                        line: 6,
                         character: 39,
                     },
                 },
-                _content: "1 pez\n2 pez\n3 pez\n4 pez",
+                content: "1 pez\n2 pez\n3 pez\n4 pez",
             },
             ChangeBlock {
-                _range: Range {
+                title_range: Range {
                     start: Position {
-                        line: 16,
+                        line: 15,
                         character: 0,
                     },
                     end: Position {
-                        line: 23,
+                        line: 15,
+                        character: 39,
+                    },
+                },
+                content: "1 poisson\n2 poisson\n3 poisson\n4 poisson",
+            },
+            ChangeBlock {
+                title_range: Range {
+                    start: Position {
+                        line: 24,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: 24,
                         character: 27,
                     },
                 },
-                _content: "1 poisson\n2 poisson\n3 poisson\n4 poisson",
+                content: "1 pescare\n2 pescare\n3 pescare\n4 pescare",
             },
             ChangeBlock {
-                _range: Range {
+                title_range: Range {
                     start: Position {
-                        line: 25,
+                        line: 29,
                         character: 0,
                     },
                     end: Position {
-                        line: 28,
+                        line: 29,
                         character: 39,
                     },
                 },
-                _content: "1 pescare\n2 pescare\n3 pescare\n4 pescare",
-            },
-            ChangeBlock {
-                _range: Range {
-                    start: Position {
-                        line: 30,
-                        character: 0,
-                    },
-                    end: Position {
-                        line: 37,
-                        character: 28,
-                    },
-                },
-                _content: "1 fisch\n2 fisch\n3 fisch\n4 fisch",
+                content: "1 fisch\n2 fisch\n3 fisch\n4 fisch",
             },
         ],
     },
     Conflict {
-        _blocks: [
+        range: Range {
+            start: Position {
+                line: 40,
+                character: 0,
+            },
+            end: Position {
+                line: 73,
+                character: 28,
+            },
+        },
+        title_range: Range {
+            start: Position {
+                line: 40,
+                character: 0,
+            },
+            end: Position {
+                line: 40,
+                character: 23,
+            },
+        },
+        blocks: [
             ChangeBlock {
-                _range: Range {
+                title_range: Range {
                     start: Position {
-                        line: 42,
+                        line: 41,
                         character: 0,
                     },
                     end: Position {
-                        line: 49,
+                        line: 41,
                         character: 39,
                     },
                 },
-                _content: "5 pez\n6 pez\n7 pez\n8 pez",
+                content: "5 pez\n6 pez\n7 pez\n8 pez",
             },
             ChangeBlock {
-                _range: Range {
+                title_range: Range {
                     start: Position {
-                        line: 51,
+                        line: 50,
                         character: 0,
                     },
                     end: Position {
-                        line: 58,
+                        line: 50,
+                        character: 39,
+                    },
+                },
+                content: "5 poisson\n6 poisson\n7 poisson\n8 poisson",
+            },
+            ChangeBlock {
+                title_range: Range {
+                    start: Position {
+                        line: 59,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: 59,
                         character: 27,
                     },
                 },
-                _content: "5 poisson\n6 poisson\n7 poisson\n8 poisson",
+                content: "5 pescare\n6 pescare\n7 pescare\n8 pescare",
             },
             ChangeBlock {
-                _range: Range {
+                title_range: Range {
                     start: Position {
-                        line: 60,
+                        line: 64,
                         character: 0,
                     },
                     end: Position {
-                        line: 63,
+                        line: 64,
                         character: 39,
                     },
                 },
-                _content: "5 pescare\n6 pescare\n7 pescare\n8 pescare",
-            },
-            ChangeBlock {
-                _range: Range {
-                    start: Position {
-                        line: 65,
-                        character: 0,
-                    },
-                    end: Position {
-                        line: 72,
-                        character: 28,
-                    },
-                },
-                _content: "5 fisch\n6 fisch\n7 fisch\n8 fisch",
+                content: "5 fisch\n6 fisch\n7 fisch\n8 fisch",
             },
         ],
     },

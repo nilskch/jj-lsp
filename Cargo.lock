@@ -239,6 +239,8 @@ dependencies = [
  "insta",
  "lazy_static",
  "regex",
+ "serde",
+ "serde_json",
  "tokio",
  "tower-lsp-server",
 ]

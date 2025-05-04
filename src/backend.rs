@@ -156,14 +156,16 @@ impl LanguageServer for Backend {
             .map(|(diagnostic, _)| diagnostic.clone())
             .collect::<Vec<_>>();
 
-        self.diagnostics_and_code_actions.lock().await.insert(
-            params.text_document.uri.clone(),
-            diagnostics_and_code_actions,
-        );
+        let mut diagnostics_map = self.diagnostics_and_code_actions.lock().await;
+        let uri_clone = params.text_document.uri.clone();
 
-        self.client
-            .publish_diagnostics(params.text_document.uri, diagnostics, None)
-            .await
+        if diagnostics_map.get(&uri_clone) != Some(&diagnostics_and_code_actions) {
+            diagnostics_map.insert(uri_clone, diagnostics_and_code_actions);
+
+            self.client
+                .publish_diagnostics(params.text_document.uri, diagnostics, None)
+                .await
+        }
     }
 
     async fn code_action(&self, params: CodeActionParams) -> Result<Option<CodeActionResponse>> {
@@ -180,7 +182,9 @@ impl LanguageServer for Backend {
         let code_actions = diagnostics_and_code_actions
             .into_iter()
             .filter_map(|(diagnostic, code_actions)| {
-                // TODO: need to remove this ugly hack asap once lsp_types::Diagnostics derive Hash
+                // NOTE: there are only very few diagnostics per file, so it's ok to iterate here
+                // instead of using a hash map; hashing will be more expensive than iterating in
+                // most cases
                 if params.context.diagnostics.iter().any(|x| x == &diagnostic) {
                     Some(code_actions)
                 } else {

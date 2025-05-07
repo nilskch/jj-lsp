@@ -1,57 +1,78 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 # jj-lsp
 
-Simple LSP to resolve conflicts in the [jj-vcs](https://github.com/jj-vcs/jj).
+A Language Server Protocol (LSP) implementation for resolving conflicts in the [jj version control system](https://github.com/jj-vcs/jj).
 
-## Motivation & Contributing
+## Overview
 
-I am completely new to jj and I am pretty sure I will never go back to git. I think one of the
-nicest features of jj is that rebasing never fails. That means conflicts are part of the code until
-they get resolved. My thinking is there should be tooling around working with conflicts in the same
-way that there is tooling to work with any other programming language. Having a jj LSP is nice for
-all the same reasons (works in every modern editor).
+jj-lsp enhances your development workflow by providing specialized editor integration for working with jj conflicts. Unlike traditional VCS tools, jj keeps conflicts as part of the codebase until they're resolved, which makes an LSP approach particularly valuable.
 
-I have yet to figure out if this is a good idea/nice development workflow or not. I'm building this
-LSP for myself for now to figure this out, but happy to hear your (yes you, the person who reads
-this right now) opinion about this. Please open an issue, write me an email, or ping me on Discord.
+## Features
 
+- ✅ **Conflict Detection**: Automatically identifies and highlights merge conflicts in your files
+- ✅ **Code Actions**: Quickly resolve conflicts with editor actions to accept specific changes
+- ✅ **Diagnostics**: Clear error messages for conflicts that need resolution
+- 🔜 **Folding Ranges**: Collapse conflict sections for better readability
+- 🔜 **Code Lenses**: One-click conflict resolution (similar to VSCode git integration)
+- 🔜 **Hover Information**: Rich markdown representation of conflicts
 
-## Demo of the current status in Zed
+## Installation
+
+```
+cargo install jj-lsp
+```
+
+## Usage
+
+Configure your editor to use jj-lsp as a language server for files in jj repositories. Specific setup instructions vary by editor.
+
+## Demo
 
 [![Demo](https://github.com/user-attachments/assets/8871e352-3c2d-44c2-b6fc-39814cfc7f2a)](https://github.com/user-attachments/assets/8871e352-3c2d-44c2-b6fc-39814cfc7f2a)
 
+## Editor Support
 
-## Important Note
-This LSP is currently under active development and might not work well for you in your editor. I am
-using Zed and currently try to figure out the best workflow for me. I want to use features from the
-LSP spec that are currently not supported by the Zed LSP client, so it might take some time until I
-am happy.
+This LSP is currently being developed with [Zed](https://zed.dev/) as the primary editor target, but should work with any LSP-compatible editor.
 
-Missing Zed LSP features:
-- `textDocument/foldingRange` ([docs](https://microsoft.github.io/language-server-protocol/specification#textDocument_foldingRange)) -
-  I want to be able to fold entire conflicts and each change within a conflict
-- `textDocument/codeLens` ([docs](https://microsoft.github.io/language-server-protocol/specification#textDocument_codeLens)) -
-  I want to add code lenses above each conflict so you can accept one of the changes (similar to
-  VSCode git integration)
-- `textDocument/semanticTokens` ([docs](https://microsoft.github.io/language-server-protocol/specification#textDocument_semanticTokens)) -
-  I want to color the background of changes and of conflicts (similar to VSCode git integration)
+### Current Limitations
 
-### Example of VSCode git integration
-In the end (once Zed supports all needed LSP features), I want the UI (in Zed) to look something
-like this:
+Some planned features require LSP capabilities that may not be supported by all editors:
+
+- `textDocument/foldingRange` - For folding conflicts and changes
+- `textDocument/codeLens` - For adding action buttons above conflicts
+- `textDocument/semanticTokens` - For background coloring of changes
+
+### Example of Target Experience
+
+The goal is to provide an experience similar to VSCode's git integration:
 
 <img width="894" alt="vscode_git_example" src="https://github.com/user-attachments/assets/10d76b8a-b835-4dba-a0d7-e30985b17cd1" />
 
-But unfortunately those three features are not easy to implement in Zed, so I will make some
-tradeoffs for now...
+## Motivation & Contributing
 
-## Planned features (for now)
-- [x] Diagnostics for conflicts
-- [x] Code actions to resolve conflicts
-- [ ] Folding ranges for the different changes
-- [ ] Code lenses to resolve conflicts (similar to git integration in VSCode)
-- [ ] Hover tooltips to show a nicer markdown representation of the conflict
+I believe jj's approach to conflicts (never failing rebases, keeping conflicts as part of the code) deserves specialized tooling. This LSP aims to make working with conflicts as natural as working with any programming language.
+
+This project is currently in active development, and I welcome contributions:
+
+- File issues for bugs or feature requests
+- Submit pull requests
+- Reach out with feedback or suggestions via email or Discord
+
+## Development
+
+```bash
+# Clone the repository
+git clone https://github.com/nilskch/jj-lsp.git
+cd jj-lsp
+
+# Build the project
+cargo build
+
+# Run tests
+cargo test
+```
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT License](LICENSE).

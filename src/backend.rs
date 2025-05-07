@@ -25,6 +25,7 @@ impl Deref for Backend {
 pub struct BackendInner {
     client: Client,
     diagnostics_and_code_actions: Mutex<HashMap<Uri, Vec<(Diagnostic, CodeActionResponse)>>>,
+    client_capabilities: Mutex<ClientCapabilities>,
 }
 
 impl Backend {
@@ -33,6 +34,7 @@ impl Backend {
             inner: Arc::new(BackendInner {
                 client,
                 diagnostics_and_code_actions: Default::default(),
+                client_capabilities: Mutex::new(ClientCapabilities::default()),
             }),
         }
     }
@@ -98,7 +100,9 @@ impl Backend {
 }
 
 impl LanguageServer for Backend {
-    async fn initialize(&self, _: InitializeParams) -> Result<InitializeResult> {
+    async fn initialize(&self, params: InitializeParams) -> Result<InitializeResult> {
+        *self.client_capabilities.lock().await = params.capabilities;
+
         Ok(InitializeResult {
             capabilities: ServerCapabilities {
                 text_document_sync: Some(TextDocumentSyncCapability::Kind(
@@ -135,9 +139,17 @@ impl LanguageServer for Backend {
             diagnostics_and_code_actions,
         );
 
-        self.client
-            .publish_diagnostics(params.text_document.uri, diagnostics, None)
-            .await
+        let capabilities = self.client_capabilities.lock().await;
+        if capabilities
+            .text_document
+            .as_ref()
+            .and_then(|td| td.diagnostic.as_ref())
+            .is_some()
+        {
+            self.client
+                .publish_diagnostics(params.text_document.uri, diagnostics, None)
+                .await;
+        }
     }
 
     async fn did_change(&self, params: DidChangeTextDocumentParams) {
@@ -162,13 +174,31 @@ impl LanguageServer for Backend {
         if diagnostics_map.get(&uri_clone) != Some(&diagnostics_and_code_actions) {
             diagnostics_map.insert(uri_clone, diagnostics_and_code_actions);
 
-            self.client
-                .publish_diagnostics(params.text_document.uri, diagnostics, None)
-                .await
+            let capabilities = self.client_capabilities.lock().await;
+            if capabilities
+                .text_document
+                .as_ref()
+                .and_then(|td| td.diagnostic.as_ref())
+                .is_some()
+            {
+                self.client
+                    .publish_diagnostics(params.text_document.uri, diagnostics, None)
+                    .await;
+            }
         }
     }
 
     async fn code_action(&self, params: CodeActionParams) -> Result<Option<CodeActionResponse>> {
+        let capabilities = self.client_capabilities.lock().await;
+        if capabilities
+            .text_document
+            .as_ref()
+            .and_then(|td| td.code_action.as_ref())
+            .is_none()
+        {
+            return Ok(None);
+        }
+
         let Some(diagnostics_and_code_actions) = self
             .diagnostics_and_code_actions
             .lock()

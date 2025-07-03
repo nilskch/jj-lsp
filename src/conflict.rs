@@ -91,12 +91,21 @@ impl<'a> Analyzer<'a> {
         let mut next_line = self.cur_line?;
 
         while !is_known_pattern(next_line) {
-            if let Some(line_content) = next_line.strip_prefix("+") {
-                if !content.is_empty() {
-                    content.push('\n');
-                }
-                content.push_str(line_content);
+            if next_line.starts_with("-") {
+                next_line = self.next()?;
+                continue;
             }
+
+            if !content.is_empty() {
+                content.push('\n');
+            }
+
+            if let Some(line_content) = next_line.strip_prefix("+") {
+                content.push_str(line_content);
+            } else {
+                content.push_str(next_line);
+            }
+
             next_line = self.next()?;
         }
 

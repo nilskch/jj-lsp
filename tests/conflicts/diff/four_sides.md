@@ -9,10 +9,13 @@ This is some test file
 -2 fish
 -3 fish
 -4 fish
+foo
 +1 pez
 +2 pez
 +3 pez
 +4 pez
+bar
+baz
 %%%%%%% Changes from base #2 to side #2
 -1 fish
 -2 fish

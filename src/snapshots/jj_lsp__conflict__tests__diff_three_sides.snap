@@ -1,6 +1,6 @@
 ---
 source: src/conflict.rs
-assertion_line: 181
+assertion_line: 190
 expression: conflicts
 ---
 [
@@ -11,7 +11,7 @@ expression: conflicts
                 character: 0,
             },
             end: Position {
-                line: 29,
+                line: 32,
                 character: 28,
             },
         },
@@ -37,16 +37,16 @@ expression: conflicts
                         character: 39,
                     },
                 },
-                content: "1 pez\n2 pez\n3 pez\n4 pez",
+                content: "foo\n1 pez\n2 pez\n3 pez\n4 pez\nbar\nbaz",
             },
             ChangeBlock {
                 title_range: Range {
                     start: Position {
-                        line: 15,
+                        line: 18,
                         character: 0,
                     },
                     end: Position {
-                        line: 15,
+                        line: 18,
                         character: 39,
                     },
                 },
@@ -55,11 +55,11 @@ expression: conflicts
             ChangeBlock {
                 title_range: Range {
                     start: Position {
-                        line: 24,
+                        line: 27,
                         character: 0,
                     },
                     end: Position {
-                        line: 24,
+                        line: 27,
                         character: 27,
                     },
                 },
@@ -70,21 +70,21 @@ expression: conflicts
     Conflict {
         range: Range {
             start: Position {
-                line: 31,
+                line: 34,
                 character: 0,
             },
             end: Position {
-                line: 55,
+                line: 58,
                 character: 28,
             },
         },
         title_range: Range {
             start: Position {
-                line: 31,
+                line: 34,
                 character: 0,
             },
             end: Position {
-                line: 31,
+                line: 34,
                 character: 23,
             },
         },
@@ -92,11 +92,11 @@ expression: conflicts
             ChangeBlock {
                 title_range: Range {
                     start: Position {
-                        line: 32,
+                        line: 35,
                         character: 0,
                     },
                     end: Position {
-                        line: 32,
+                        line: 35,
                         character: 39,
                     },
                 },
@@ -105,11 +105,11 @@ expression: conflicts
             ChangeBlock {
                 title_range: Range {
                     start: Position {
-                        line: 41,
+                        line: 44,
                         character: 0,
                     },
                     end: Position {
-                        line: 41,
+                        line: 44,
                         character: 39,
                     },
                 },
@@ -118,11 +118,11 @@ expression: conflicts
             ChangeBlock {
                 title_range: Range {
                     start: Position {
-                        line: 50,
+                        line: 53,
                         character: 0,
                     },
                     end: Position {
-                        line: 50,
+                        line: 53,
                         character: 27,
                     },
                 },

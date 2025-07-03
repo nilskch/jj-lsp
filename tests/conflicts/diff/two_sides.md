@@ -9,10 +9,13 @@ This is some test file
 -2 fish
 -3 fish
 -4 fish
+foo
 +1 pez
 +2 pez
 +3 pez
 +4 pez
+bar
+baz
 +++++++ Contents of side #2
 1 poisson
 2 poisson

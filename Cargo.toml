@@ -9,8 +9,8 @@ readme = "README.md"
 license = "MIT"
 
 [dependencies]
-insta = "1.42"
+insta = "1.43"
 lazy_static = "1.5"
 regex = "1"
-tokio = { version = "1.44.2", features = ["full"] }
-tower-lsp-server = "0.21"
+tokio = { version = "1.46", features = ["full"] }
+tower-lsp-server = "0.22"

@@ -63,7 +63,7 @@ impl Backend {
                             let diagnostic = Diagnostic {
                                 message: "Conflicting change".to_string(),
                                 range: conflict_block.title_range,
-                                severity: Some(DiagnosticSeverity::WARNING),
+                                severity: Some(DiagnosticSeverity::INFORMATION),
                                 ..Default::default()
                             };
 

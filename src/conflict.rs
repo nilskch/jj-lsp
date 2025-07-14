@@ -176,8 +176,8 @@ mod tests {
     fn test_diff_two_sides() {
         let content = fs::read_to_string("tests/conflicts/diff/two_sides.md")
             .expect("Failed to read input file");
-        let mut anayzer = Analyzer::new(&content);
-        let conflicts = anayzer.find_conflicts();
+        let mut analyzer = Analyzer::new(&content);
+        let conflicts = analyzer.find_conflicts();
         assert_debug_snapshot!(conflicts);
     }
 
@@ -185,8 +185,8 @@ mod tests {
     fn test_diff_three_sides() {
         let content = fs::read_to_string("tests/conflicts/diff/three_sides.md")
             .expect("Failed to read input file");
-        let mut anayzer = Analyzer::new(&content);
-        let conflicts = anayzer.find_conflicts();
+        let mut analyzer = Analyzer::new(&content);
+        let conflicts = analyzer.find_conflicts();
         assert_debug_snapshot!(conflicts);
     }
 
@@ -194,8 +194,8 @@ mod tests {
     fn test_diff_four_sides() {
         let content = fs::read_to_string("tests/conflicts/diff/four_sides.md")
             .expect("Failed to read input file");
-        let mut anayzer = Analyzer::new(&content);
-        let conflicts = anayzer.find_conflicts();
+        let mut analyzer = Analyzer::new(&content);
+        let conflicts = analyzer.find_conflicts();
         assert_debug_snapshot!(conflicts);
     }
 

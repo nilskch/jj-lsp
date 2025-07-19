@@ -87,10 +87,38 @@ impl Backend {
                             (diagnostic, code_actions)
                         });
 
-                let header_code_actions = block_diagnostics_and_code_actions
+                let block_code_actions = block_diagnostics_and_code_actions
                     .clone()
                     .flat_map(|(_, code_actions)| code_actions)
                     .collect::<Vec<_>>();
+
+                // Create "Accept all changes" action that combines all conflict blocks
+                let combined_content = conflict
+                    .blocks
+                    .iter()
+                    .map(|block| block.content.as_str())
+                    .collect::<Vec<_>>()
+                    .join("");
+
+                let accept_all_edit = TextEdit {
+                    new_text: combined_content,
+                    range: conflict.range,
+                };
+
+                let accept_all_workspace_edit = WorkspaceEdit {
+                    changes: Some([(uri.clone(), vec![accept_all_edit])].into()),
+                    ..Default::default()
+                };
+
+                let accept_all_action = CodeActionOrCommand::CodeAction(CodeAction {
+                    title: "Accept all changes".to_string(),
+                    diagnostics: Some(vec![header_diagnostic.clone()]),
+                    edit: Some(accept_all_workspace_edit),
+                    ..Default::default()
+                });
+
+                let mut header_code_actions = vec![accept_all_action];
+                header_code_actions.extend(block_code_actions);
 
                 block_diagnostics_and_code_actions
                     .chain(std::iter::once((header_diagnostic, header_code_actions)))

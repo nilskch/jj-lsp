@@ -45,6 +45,14 @@ jobs:
           echo '[target.aarch64-unknown-linux-gnu]' >> ~/.cargo/config.toml
           echo 'linker = "aarch64-linux-gnu-gcc"' >> ~/.cargo/config.toml
 
+      - name: Setup cross-compilation
+        if: matrix.target == 'aarch64-unknown-linux-musl'
+        run: |
+          sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-musl g++-aarch64-linux-musl
+          mkdir -p ~/.cargo
+          echo '[target.aarch64-unknown-linux-musl]' >> ~/.cargo/config.toml
+          echo 'linker = "aarch64-linux-musl-gcc"' >> ~/.cargo/config.toml
+
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
 

@@ -48,10 +48,12 @@ jobs:
       - name: Setup cross-compilation
         if: matrix.target == 'aarch64-unknown-linux-musl'
         run: |
-          sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu musl-tools
+          wget -q https://musl.cc/aarch64-linux-musl-cross.tgz
+          tar -xf aarch64-linux-musl-cross.tgz
+          sudo mv aarch64-linux-musl-cross /opt/
           mkdir -p ~/.cargo
           echo '[target.aarch64-unknown-linux-musl]' >> ~/.cargo/config.toml
-          echo 'linker = "aarch64-linux-musl-gcc"' >> ~/.cargo/config.toml
+          echo 'linker = "/opt/aarch64-linux-musl-cross/bin/aarch64-linux-musl-gcc"' >> ~/.cargo/config.toml
 
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}

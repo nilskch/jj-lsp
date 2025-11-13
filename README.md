@@ -16,7 +16,8 @@ https://github.com/user-attachments/assets/15ec57b6-810f-4e62-b9ad-097a2564f78a
 
 ### Zed Extension
 
-You can install the `jj-lsp` via a Zed extension called [JJ Conflict Resolver](https://github.com/nilskch/zed-jj-lsp)
+You can install the `jj-lsp` via a Zed extension called [JJ Conflict Resolver](https://github.com/nilskch/zed-jj-lsp).
+There is no further configuration needed :)
 
 ### Cargo
 

@@ -12,5 +12,5 @@ license = "MIT"
 insta = "1.43"
 lazy_static = "1.5"
 regex = "1"
-tokio = { version = "1.46", features = ["full"] }
+tokio = { version = "1.48", features = ["full"] }
 tower-lsp-server = "0.22"

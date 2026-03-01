@@ -1,45 +1,41 @@
-use crate::types::{ChangeBlock, Conflict};
+use std::sync::LazyLock;
+
 use regex::Regex;
 use std::str::Lines;
 use tower_lsp_server::lsp_types::{Position, Range};
 
+use crate::types::{ChangeBlock, Conflict};
 use crate::utils::get_utf16_len;
 
-lazy_static::lazy_static! {
-    static ref DIFF_CONFLICT_START_REGEX: Regex =
-        Regex::new(r"^<<<<<<< Conflict \d+ of \d+$").unwrap();
-    static ref DIFF_CONFLICT_END_REGEX: Regex =
-        Regex::new(r"^>>>>>>> Conflict \d+ of \d+ ends$").unwrap();
-    static ref DIFF_CHANGE_HEADER_REGEX: Regex =
-        Regex::new(r"^%%%%%%% Changes from (base(?: #\d+)? to )?side #\d+$").unwrap();
-    static ref DIFF_CONTENTS_HEADER_REGEX: Regex =
-        Regex::new(r"^\+{7} Contents of side #\d+$").unwrap();
-}
+static DIFF_CONFLICT_START_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^<{7,} [Cc]onflict \d+ of \d+$").unwrap());
+static DIFF_CONFLICT_END_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^>{7,} [Cc]onflict \d+ of \d+ ends$").unwrap());
+static DIFF_CHANGE_HEADER_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^%{7,} .+$").unwrap());
+static DIFF_CONTENTS_HEADER_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^\+{7,} .+$").unwrap());
+static DIFF_CONTINUATION_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^\\{7,}\s").unwrap());
 
 pub struct Analyzer<'a> {
     conflicts: Vec<Conflict>,
     lines: Lines<'a>,
     cur_line: Option<&'a str>,
-    next_line: Option<&'a str>,
     cur_line_number: u32,
 }
 
 impl<'a> Analyzer<'a> {
     pub fn new(content: &'a str) -> Self {
-        let mut lines = content.lines();
-        let cur_line = lines.next();
-        let next_line = lines.next();
-
         Analyzer {
             conflicts: vec![],
-            lines,
-            cur_line,
-            next_line,
+            lines: content.lines(),
+            cur_line: None,
             cur_line_number: 0,
         }
     }
 
-    pub fn find_conflicts(&'a mut self) -> &'a Vec<Conflict> {
+    pub fn find_conflicts(&'a mut self) -> &'a [Conflict] {
         while let Some(line) = self.next() {
             if DIFF_CONFLICT_START_REGEX.is_match(line) {
                 self.parse_diff_marker();
@@ -86,13 +82,14 @@ impl<'a> Analyzer<'a> {
     fn parse_change_block(&mut self) -> Option<ChangeBlock> {
         let title_range = self.get_range_of_current_line()?;
         self.next();
+        self.skip_continuation_lines();
 
         let mut content = String::new();
-        let mut next_line = self.cur_line?;
+        let mut line = self.cur_line?;
 
-        while !is_known_pattern(next_line) {
-            if next_line.starts_with("-") {
-                next_line = self.next()?;
+        while !is_known_pattern(line) {
+            if line.starts_with("-") {
+                line = self.next()?;
                 continue;
             }
 
@@ -100,55 +97,59 @@ impl<'a> Analyzer<'a> {
                 content.push('\n');
             }
 
-            if let Some(line_content) = next_line.strip_prefix("+") {
+            if let Some(line_content) = line.strip_prefix("+") {
                 content.push_str(line_content);
             } else {
-                content.push_str(next_line);
+                content.push_str(line);
             }
 
-            next_line = self.next()?;
+            line = self.next()?;
         }
 
-        let block = ChangeBlock {
+        Some(ChangeBlock {
             title_range,
             content,
-        };
-
-        Some(block)
+        })
     }
 
     fn parse_contents_block(&mut self) -> Option<ChangeBlock> {
         let title_range = self.get_range_of_current_line()?;
-
         self.next()?;
+        self.skip_continuation_lines();
 
         let mut content = String::new();
-        let mut next_line = self.cur_line?;
+        let mut line = self.cur_line?;
 
-        while !is_known_pattern(next_line) {
+        while !is_known_pattern(line) {
             if !content.is_empty() {
                 content.push('\n');
             }
-            content.push_str(next_line);
-            next_line = self.next()?;
+            content.push_str(line);
+            line = self.next()?;
         }
 
-        let block = ChangeBlock {
+        Some(ChangeBlock {
             title_range,
             content,
-        };
+        })
+    }
 
-        Some(block)
+    /// Skip continuation lines (e.g. `\\\\\\\ to: ...` in jj 0.37+)
+    fn skip_continuation_lines(&mut self) {
+        while let Some(line) = self.cur_line {
+            if DIFF_CONTINUATION_REGEX.is_match(line) {
+                self.next();
+            } else {
+                break;
+            }
+        }
     }
 
     fn next(&mut self) -> Option<&'a str> {
-        self.cur_line = self.next_line;
-        self.next_line = self.lines.next();
-
         if self.cur_line.is_some() {
             self.cur_line_number += 1;
         }
-
+        self.cur_line = self.lines.next();
         self.cur_line
     }
 
@@ -164,6 +165,7 @@ fn is_known_pattern(content: &str) -> bool {
     DIFF_CHANGE_HEADER_REGEX.is_match(content)
         || DIFF_CONTENTS_HEADER_REGEX.is_match(content)
         || DIFF_CONFLICT_END_REGEX.is_match(content)
+        || DIFF_CONTINUATION_REGEX.is_match(content)
 }
 
 #[cfg(test)]
@@ -200,8 +202,27 @@ mod tests {
     }
 
     #[test]
+    fn test_diff_whole_file_detailed() {
+        let content = fs::read_to_string("tests/conflicts/diff/whole_file_detailed.md")
+            .expect("Failed to read input file");
+        let mut analyzer = Analyzer::new(&content);
+        let conflicts = analyzer.find_conflicts();
+        assert_debug_snapshot!(conflicts);
+    }
+
+    #[test]
+    fn test_diff_two_sides_detailed() {
+        let content = fs::read_to_string("tests/conflicts/diff/two_sides_detailed.md")
+            .expect("Failed to read input file");
+        let mut analyzer = Analyzer::new(&content);
+        let conflicts = analyzer.find_conflicts();
+        assert_debug_snapshot!(conflicts);
+    }
+
+    #[test]
     fn test_regex_patterns() {
         let tests = [
+            // Classic format (jj < 0.37)
             (DIFF_CONFLICT_START_REGEX.clone(), "<<<<<<< Conflict 1 of 2"),
             (
                 DIFF_CONFLICT_END_REGEX.clone(),
@@ -219,10 +240,44 @@ mod tests {
                 DIFF_CONTENTS_HEADER_REGEX.clone(),
                 "+++++++ Contents of side #2",
             ),
+            // Detailed format (jj 0.37+)
+            (DIFF_CONFLICT_START_REGEX.clone(), "<<<<<<< conflict 1 of 2"),
+            (
+                DIFF_CONFLICT_END_REGEX.clone(),
+                ">>>>>>> conflict 2 of 2 ends",
+            ),
+            (
+                DIFF_CHANGE_HEADER_REGEX.clone(),
+                r#"%%%%%%% diff from: rlvkpnrz 2f040964 (rebased revision's parent)"#,
+            ),
+            (
+                DIFF_CONTENTS_HEADER_REGEX.clone(),
+                r#"+++++++ zsuskuln f7705e4f (rebased revision)"#,
+            ),
+            // Longer conflict markers (jj 0.25+)
+            (
+                DIFF_CONFLICT_START_REGEX.clone(),
+                "<<<<<<<< conflict 1 of 2",
+            ),
+            (
+                DIFF_CONFLICT_END_REGEX.clone(),
+                ">>>>>>>> conflict 1 of 2 ends",
+            ),
+            (
+                DIFF_CHANGE_HEADER_REGEX.clone(),
+                "%%%%%%%% Changes from base to side #1",
+            ),
+            (
+                DIFF_CONTENTS_HEADER_REGEX.clone(),
+                "++++++++ Contents of side #2",
+            ),
         ];
 
         for (regex_pattern, haystack) in tests {
-            assert!(regex_pattern.is_match(haystack))
+            assert!(
+                regex_pattern.is_match(haystack),
+                "expected pattern to match: {haystack}"
+            );
         }
     }
 }

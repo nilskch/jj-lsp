@@ -1,0 +1,106 @@
+---
+source: src/conflict.rs
+expression: conflicts
+---
+[
+    Conflict {
+        range: Range {
+            start: Position {
+                line: 5,
+                character: 0,
+            },
+            end: Position {
+                line: 24,
+                character: 28,
+            },
+        },
+        title_range: Range {
+            start: Position {
+                line: 5,
+                character: 0,
+            },
+            end: Position {
+                line: 5,
+                character: 23,
+            },
+        },
+        blocks: [
+            ChangeBlock {
+                title_range: Range {
+                    start: Position {
+                        line: 6,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: 6,
+                        character: 64,
+                    },
+                },
+                content: "foo\n1 pez\n2 pez\n3 pez\n4 pez\nbar\nbaz",
+            },
+            ChangeBlock {
+                title_range: Range {
+                    start: Position {
+                        line: 19,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: 19,
+                        character: 44,
+                    },
+                },
+                content: "1 poisson\n2 poisson\n3 poisson\n4 poisson",
+            },
+        ],
+    },
+    Conflict {
+        range: Range {
+            start: Position {
+                line: 26,
+                character: 0,
+            },
+            end: Position {
+                line: 42,
+                character: 28,
+            },
+        },
+        title_range: Range {
+            start: Position {
+                line: 26,
+                character: 0,
+            },
+            end: Position {
+                line: 26,
+                character: 23,
+            },
+        },
+        blocks: [
+            ChangeBlock {
+                title_range: Range {
+                    start: Position {
+                        line: 27,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: 27,
+                        character: 64,
+                    },
+                },
+                content: "5 pez\n6 pez\n7 pez\n8 pez",
+            },
+            ChangeBlock {
+                title_range: Range {
+                    start: Position {
+                        line: 37,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: 37,
+                        character: 44,
+                    },
+                },
+                content: "5 poisson\n6 poisson\n7 poisson\n8 poisson",
+            },
+        ],
+    },
+]

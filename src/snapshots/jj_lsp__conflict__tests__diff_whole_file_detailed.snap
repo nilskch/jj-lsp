@@ -1,0 +1,57 @@
+---
+source: src/conflict.rs
+assertion_line: 235
+expression: conflicts
+---
+[
+    Conflict {
+        range: Range {
+            start: Position {
+                line: 0,
+                character: 0,
+            },
+            end: Position {
+                line: 15,
+                character: 28,
+            },
+        },
+        title_range: Range {
+            start: Position {
+                line: 0,
+                character: 0,
+            },
+            end: Position {
+                line: 0,
+                character: 23,
+            },
+        },
+        blocks: [
+            ChangeBlock {
+                title_range: Range {
+                    start: Position {
+                        line: 1,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: 1,
+                        character: 117,
+                    },
+                },
+                content: "a\nb\nc\nd\ne",
+            },
+            ChangeBlock {
+                title_range: Range {
+                    start: Position {
+                        line: 8,
+                        character: 0,
+                    },
+                    end: Position {
+                        line: 8,
+                        character: 44,
+                    },
+                },
+                content: "1\n2\n3\n4\n5\n6",
+            },
+        ],
+    },
+]
